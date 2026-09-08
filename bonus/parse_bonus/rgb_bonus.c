@@ -17,27 +17,34 @@ int	check_rgb(int *x, char **palet)
 	int	i;
 	int	j;
 	int	clr;
+	int	packed;
 
+	if (!x || !palet)
+		return (ERROR);
 	i = -1;
+	packed = 0;
 	while (++i < 3)
 	{
-		if (palet[i] == NULL)
+		if (!palet[i])
 			return (ERROR);
-		*x = *x * 256;
+		palet[i] = trim_line(palet[i]);
+		if (!palet[i] || !palet[i][0])
+			return (ERROR);
 		j = -1;
 		clr = 0;
-		palet[i] = trim_line(palet[i]);
-		while (palet[i][++j] != '\0')
+		while (palet[i][++j])
 		{
-			if (ft_isdigit(palet[i][j]) == FALSE)
+			if (!ft_isdigit(palet[i][j]) || clr > 25
+				|| (clr == 25 && palet[i][j] > '5'))
 				return (ERROR);
 			clr = clr * 10 + palet[i][j] - '0';
 		}
-		if (ft_atoi(palet[i]) > 255 || ft_atoi(palet[i]) < 0)
-			return (ERROR);
-		*x = *x + clr;
+		packed = packed * 256 + clr;
 	}
-	return (0);
+	if (palet[3])
+		return (ERROR);
+	*x = packed;
+	return (SUCCESS);
 }
 
 int	is_color(int texture, t_parse *parse, char *line)
@@ -55,8 +62,8 @@ int	is_color(int texture, t_parse *parse, char *line)
 			|| parse->flag == 1)
 		{
 			return (ERROR);
-			parse->c = TRUE;
 		}
+		parse->c = TRUE;
 	}
 	return (0);
 }

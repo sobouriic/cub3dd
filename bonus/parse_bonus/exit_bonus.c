@@ -21,14 +21,14 @@ void	ft_error(char *err)
 
 int	ft_destroy(t_cub3d *cub, int ret)
 {
-	if (cub->img.ptr)
+	if (cub && cub->mlx && cub->img.ptr)
 		mlx_destroy_image(cub->mlx, cub->img.ptr);
-	if (cub->win)
+	if (cub && cub->mlx && cub->win)
 		mlx_destroy_window(cub->mlx, cub->win);
 	if (cub)
 		exit(ret);
 	else
-		exit(0);
+		exit(ret);
 	return (ret);
 }
 
@@ -49,6 +49,10 @@ int	the_wall(t_cub3d *cub, double x, double y)
 	int	i;
 	int	j;
 
+	if (!isfinite(x) || !isfinite(y) || x < 0 || y < 0
+		|| x >= cub->map.map_col * SIZE_W
+		|| y >= cub->map.map_row * SIZE_W)
+		return (TRUE);
 	i = (int)floor(x / SIZE_W);
 	j = (int)floor(y / SIZE_W);
 	return (ft_strchr("0NSEW", cub->map.map[j][i]) == NULL);

@@ -18,6 +18,13 @@ int	texture_check(t_cub3d *cub)
 	int	j;
 
 	i = 0;
+	while (i < COUNT)
+	{
+		if (!cub->parse.texture[i].path)
+			return (ERROR);
+		i++;
+	}
+	i = 0;
 	while (i <= WEST)
 	{
 		j = i;

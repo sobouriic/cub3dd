@@ -59,3 +59,18 @@ assert all(ore in visited for ore in ores)
 portal = next((x,y) for y,row in enumerate(grid) for x,tile in enumerate(row) if tile == "T")
 assert any((portal[0]+dx,portal[1]+dy) in visited for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)))
 print("PASS: island has six reachable crystals and a bridge-dependent beacon route")
+
+with tempfile.TemporaryDirectory(prefix="blockyard-invalid-headers-") as directory:
+    for name, bad_header in [
+        ("short_rgb", header.replace("F 103,147,68", "F ,,1")),
+        ("blank_rgb", header.replace("F 103,147,68", "F 1, ,2")),
+        ("overflow_rgb", header.replace("F 103,147,68", "F " + "9" * 70 + ",1,2")),
+        ("missing_texture", header.replace("NO texture/NO.xpm\n", "")),
+    ]:
+        path = Path(directory) / f"{name}.cub"
+        path.write_text(bad_header + "11111\n1E001\n10001\n11111\n")
+        result = subprocess.run([str(root / "cub3D_bonus"), str(path)], cwd=root,
+                                env=dict(os.environ, CUB_CAPTURE=str(Path(directory) / "frame.ppm")),
+                                capture_output=True, timeout=10)
+        assert result.returncode == 1, (name, result.returncode, result.stderr)
+        print("PASS:", name, "rejected cleanly")

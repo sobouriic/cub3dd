@@ -68,3 +68,10 @@ check-blockyard: $(NAME_BONUS)
 	$(CC) $(CFLAGS) $(CPPFLAGS) tests/blockyard_test.c $(filter-out bonus/parse_bonus/main.o,$(OBJB)) $(LIB) $(MLXFLAGS) -o /tmp/cub3dd-blockyard-test
 	/tmp/cub3dd-blockyard-test
 	python3 tests/blockyard_maps.py
+
+.PHONY: check-parser-safety
+check-parser-safety: $(LIB) $(MLX) $(OBJS) $(OBJB)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -DTEST_MANDATORY tests/parser_safety.c $(filter-out mandatory/parse/main.o,$(OBJS)) $(LIB) $(MLXFLAGS) -o /tmp/cub3dd-parser-test
+	/tmp/cub3dd-parser-test
+	$(CC) $(CFLAGS) $(CPPFLAGS) tests/parser_safety.c $(filter-out bonus/parse_bonus/main.o,$(OBJB)) $(LIB) $(MLXFLAGS) -o /tmp/cub3dd-bonus-parser-test
+	/tmp/cub3dd-bonus-parser-test

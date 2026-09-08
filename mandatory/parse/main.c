@@ -19,7 +19,7 @@ int	check_map_edges(t_cub3d *cub)
 
 	j = -1;
 	y = 0;
-	if (cub->parse.map[0] == NULL)
+	if (!cub->parse.map || !cub->parse.map[0])
 		return (exit_game(cub, ERROR, "Parse Fail"));
 	while (cub->parse.map[y])
 		y++;
@@ -53,6 +53,8 @@ int	main(int ac, char **av)
 	t_cub3d	*cub;
 
 	cub = ft_calloc(1, sizeof(t_cub3d));
+	if (!cub)
+		ft_error("Game allocation failed\n");
 	if (parse_arguments(ac, av) == ERROR)
 		return (exit_game(cub, ERROR, "Wrong parse"));
 	init_f_c(cub);

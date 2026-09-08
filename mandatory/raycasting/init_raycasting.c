@@ -26,10 +26,20 @@ void	map_initialisation(t_cub3d *cub)
 	int	colum;
 	int	row;
 
-	cub->map.map = (char **)malloc(sizeof(char *) * cub->map.map_row);
+	cub->map.map = ft_calloc(cub->map.map_row, sizeof(char *));
+	if (!cub->map.map)
+		ft_error("Map allocation failed\n");
 	i = -1;
 	while (++i < cub->map.map_row)
-		cub->map.map[i] = malloc(sizeof(char) * (cub->map.map_col + 1));
+	{
+		cub->map.map[i] = ft_calloc(cub->map.map_col + 1, 1);
+		if (!cub->map.map[i])
+		{
+			ft_free((void **)cub->map.map, i);
+			ft_error("Map row allocation failed\n");
+		}
+		ft_memset(cub->map.map[i], ' ', cub->map.map_col);
+	}
 	row = -1;
 	while (++row < cub->parse.row)
 	{
@@ -42,6 +52,7 @@ void	map_initialisation(t_cub3d *cub)
 		cub->map.map[row][colum] = '\0';
 	}
 	ft_free((void **)cub->parse.map, cub->parse.row);
+	cub->parse.map = NULL;
 }
 
 void	main_init(t_cub3d *cub)
@@ -54,17 +65,28 @@ void	main_init(t_cub3d *cub)
 	cub->map.r_count = cub->map.win_width / WALL_STRIP;
 	map_initialisation(cub);
 	cub->rray = (t_rrray *)malloc(sizeof(t_rrray) * (cub->map.r_count));
+	if (!cub->rray)
+		ft_error("Ray allocation failed\n");
 }
 
 void	init_mlx(t_cub3d *cub)
 {
 	cub->mlx = mlx_init();
+	if (!cub->mlx)
+		ft_error("MiniLibX initialization failed\n");
 	cub->win = mlx_new_window(cub->mlx, cub->map.win_width,
 			cub->map.win_height, "CUB3D");
+	if (!cub->win)
+		exit_game(cub, ERROR, "Window creation failed");
 	cub->img.ptr = mlx_new_image(cub->mlx, cub->map.win_width,
 			cub->map.win_height);
+	if (!cub->img.ptr)
+		exit_game(cub, ERROR, "Image allocation failed");
 	cub->img.data = (int *)mlx_get_data_addr(cub->img.ptr, &(cub->img.bpp),
 			&(cub->img.line_size), &(cub->img.endian));
+	if (!cub->img.data || cub->img.bpp != 32
+		|| cub->img.line_size < cub->map.win_width * 4)
+		exit_game(cub, ERROR, "Unsupported image buffer");
 }
 
 void	walls_3d_projection_render(t_cub3d *cub)

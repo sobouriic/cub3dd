@@ -37,8 +37,11 @@ char	**parse_rgb_values(const char *line)
 int	color_parsing(int *x, char *line)
 {
 	char	**palet;
+	int		count;
+	int		result;
 
-	*x = 0;
+	if (!x || !line)
+		return (ERROR);
 	while (is_upper(*line) == TRUE)
 		line++;
 	while (is_space(*line) == TRUE)
@@ -46,13 +49,16 @@ int	color_parsing(int *x, char *line)
 	if (count_commas(line) != 2)
 		return (ERROR);
 	palet = parse_rgb_values(line);
-	if (check_rgb(x, palet) == ERROR)
-	{
-		ft_free((void **)palet, 3);
+	if (!palet)
 		return (ERROR);
-	}
-	ft_free((void **)palet, 3);
-	return (0);
+	count = 0;
+	while (palet[count])
+		count++;
+	result = ERROR;
+	if (count == 3)
+		result = check_rgb(x, palet);
+	ft_free((void **)palet, count);
+	return (result);
 }
 
 int	check_spaces(t_cub3d *cub, int row, int colum)
