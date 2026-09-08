@@ -41,7 +41,7 @@ int	angle_setting(t_cub3d *cub, int row, int colum)
 
 int	checker2(t_cub3d *cub, int row, int colum, int i)
 {
-	if (ft_strchr("0", i) != NULL)
+	if (ft_strchr("0DPT~b", i) != NULL)
 	{
 		if (check_spaces_and_player(cub, row, colum) == ERROR)
 			return (exit_game(cub, ERROR, "space next to 0!"));
@@ -62,7 +62,7 @@ int	checker(t_cub3d *cub, int row, int colum)
 			return (ERROR);
 		cub->parse.d = TRUE;
 	}
-	else if (ft_strchr("0", str) != NULL)
+	else if (ft_strchr("0DPT~b", str) != NULL)
 	{
 		if (checker2(cub, row, colum, str) == ERROR)
 			return (ERROR);

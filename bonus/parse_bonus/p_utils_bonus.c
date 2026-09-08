@@ -14,6 +14,11 @@
 
 int	handle_parsing(t_parse *parse, int get_value, char *line)
 {
+	if (get_value == 0 && line[0] == '\0')
+	{
+		free(line);
+		return (final_map(parse));
+	}
 	if (!is_space(line[0]) && ft_isdigit(line[0]) == FALSE && line[0] != '\0')
 		return (ERROR);
 	if (add_line_size_node(&(parse->pa.line_sizes), ft_strlen(line)) == ERROR)

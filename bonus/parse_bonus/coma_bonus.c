@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sobouric <sobouric@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 01:50:45 by khammadi          #+#    #+#             */
+/*   Created: 2024/02/28 01:50:45 by sobouric          #+#    #+#             */
 /*   Updated: 2024/02/29 10:54:01 by sobouric         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -36,11 +36,9 @@ char	**parse_rgb_values(const char *line)
 
 int	color_parsing(int *x, char *line)
 {
-	int		count;
 	char	**palet;
 
 	*x = 0;
-	count = 0;
 	while (is_upper(*line) == TRUE)
 		line++;
 	while (is_space(*line) == TRUE)
@@ -59,26 +57,21 @@ int	color_parsing(int *x, char *line)
 
 int	check_spaces(t_cub3d *cub, int row, int colum)
 {
-	if (row < 0 || row >= cub->parse.row
-		|| colum < 0 || colum >= cub->parse.column)
-		return (ERROR);
-	if ((colum + 1 < cub->parse.column
-			&& cub->parse.map[row][colum + 1] == ' ') ||
-		(cub->parse.map[row][colum + 1] == '\0') ||
-		(colum - 1 >= 0 && cub->parse.map[row][colum - 1] == ' ') ||
-		(row + 1 < cub->parse.row && cub->parse.map[row + 1][colum] == ' ') ||
-		(cub->parse.map[row + 1][colum] == '\0') ||
-		(row - 1 >= 0 && cub->parse.map[row - 1][colum] == ' ') ||
-		(colum >= (int)ft_strlen(cub->parse.map[row - 1])) ||
-		(colum >= (int)ft_strlen(cub->parse.map[row + 1])))
+	int	dx[4] = {-1, 1, 0, 0};
+	int	dy[4] = {0, 0, -1, 1};
+	int	i;
+	int	x;
+	int	y;
+
+	i = -1;
+	while (++i < 4)
 	{
-		if ((colum + 1 < cub->parse.column
-				&& cub->parse.map[row][colum + 1] != ' ') ||
-			(colum - 1 >= 0 && cub->parse.map[row][colum - 1] != ' ') ||
-			(row - 1 >= 0 && cub->parse.map[row - 1][colum] != ' ') ||
-			(row + 1 < cub->parse.row && cub->parse.map[row + 1][colum] != ' '))
+		x = colum + dx[i];
+		y = row + dy[i];
+		if (y < 0 || y >= cub->parse.row || x < 0
+			|| x >= (int)ft_strlen(cub->parse.map[y])
+			|| cub->parse.map[y][x] == ' ')
 			return (ERROR);
-		return (SUCCESS);
 	}
 	return (SUCCESS);
 }

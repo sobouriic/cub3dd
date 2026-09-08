@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sobouric <sobouric@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 23:59:20 by khammadi          #+#    #+#             */
+/*   Created: 2024/02/27 23:59:20 by sobouric          #+#    #+#             */
 /*   Updated: 2024/02/28 16:03:14 by sobouric         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../includes/blockyard.h"
 
 void	update_multiple_rays(t_cub3d *cub)
 {
@@ -29,9 +29,10 @@ void	update_multiple_rays(t_cub3d *cub)
 
 void	init_mlx_loop(t_cub3d *cub)
 {
-	init_player(&cub->player);
-	mlx_hook(cub->win, 2, 1L << 0, &key_press, &cub->key);
-	mlx_hook(cub->win, 3, 1L << 1, &keyrel, &cub->key);
+	mlx_hook(cub->win, 2, 1L << 0, &vx_key_down, cub);
+	mlx_hook(cub->win, 3, 1L << 1, &vx_key_up, cub);
 	mlx_hook(cub->win, 17, 0, &ft_exit, cub);
-	mlx_loop_hook(cub->mlx, game_loop, cub);
+	mlx_mouse_hook(cub->win, &vx_mouse, cub);
+	mlx_do_key_autorepeatoff(cub->mlx);
+	mlx_loop_hook(cub->mlx, vx_loop, cub);
 }

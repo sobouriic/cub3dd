@@ -38,7 +38,7 @@ int	check_map_char(char *str)
 			continue ;
 		}
 		found_non_space = TRUE;
-		if (ft_srch("01NSEW ", str[i]) == FALSE)
+		if (ft_srch("01234NSEWDPT~b ", str[i]) == FALSE)
 		{
 			ft_error("Wrong char in map\n");
 			return (FALSE);

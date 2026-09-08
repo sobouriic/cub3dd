@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: sobouric <sobouric@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/28 01:50:45 by khammadi          #+#    #+#             */
+/*   Created: 2024/02/28 01:50:45 by sobouric          #+#    #+#             */
 /*   Updated: 2024/02/29 12:21:58 by sobouric         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -36,11 +36,9 @@ char	**parse_rgb_values(const char *line)
 
 int	color_parsing(int *x, char *line)
 {
-	int		count;
 	char	**palet;
 
 	*x = 0;
-	count = 0;
 	while (is_upper(*line) == TRUE)
 		line++;
 	while (is_space(*line) == TRUE)

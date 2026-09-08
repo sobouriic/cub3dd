@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../includes/blockyard.h"
 
 int	check_map_edges(t_cub3d *cub)
 {
@@ -63,8 +63,14 @@ int	main(int ac, char **av)
 	if (final_parsing(cub) == ERROR)
 		return (exit_game(cub, ERROR, "Parse Fail"));
 	main_init(cub);
+	vx_init(cub);
+	if (getenv("CUB_CAPTURE"))
+	{
+		vx_render();
+		vx_capture(getenv("CUB_CAPTURE"));
+		return (0);
+	}
 	init_mlx(cub);
-	apload_texture(cub);
 	init_mlx_loop(cub);
 	mlx_loop(cub->mlx);
 	text_free(cub);

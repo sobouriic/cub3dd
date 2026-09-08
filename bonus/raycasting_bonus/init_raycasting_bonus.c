@@ -29,7 +29,12 @@ void	map_initialisation(t_cub3d *cub)
 	cub->map.map = (char **)malloc(sizeof(char *) * cub->map.map_row);
 	i = -1;
 	while (++i < cub->map.map_row)
-		cub->map.map[i] = malloc(sizeof(char) * (cub->map.map_col + 1));
+		{
+		cub->map.map[i] = ft_calloc(cub->map.map_col + 1, sizeof(char));
+		if (!cub->map.map[i])
+			ft_error("Map allocation failed\n");
+		ft_memset(cub->map.map[i], ' ', cub->map.map_col);
+	}
 	row = -1;
 	while (++row < cub->parse.row)
 	{
@@ -60,7 +65,7 @@ void	init_mlx(t_cub3d *cub)
 {
 	cub->mlx = mlx_init();
 	cub->win = mlx_new_window(cub->mlx, cub->map.win_width,
-			cub->map.win_height, "CUB3D");
+			cub->map.win_height, "BLOCKYARD - cub3D bonus");
 	cub->img.ptr = mlx_new_image(cub->mlx,
 			cub->map.win_width, cub->map.win_height);
 	cub->img.data = (int *)mlx_get_data_addr(cub->img.ptr, &(cub->img.bpp),

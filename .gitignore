@@ -1,0 +1,8 @@
+*.o
+*.a
+*.dylib
+/cub3D
+/cub3D_bonus
+.DS_Store
+__pycache__/
+*.pyc

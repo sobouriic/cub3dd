@@ -1,7 +1,10 @@
 NAME = cub3D
 NAME_BONUS = cub3D_bonus
 CC = cc
-MLXFLAGS = -lmlx -framework OpenGl -framework AppKit
+MLX_DIR = mlx
+MLX = $(MLX_DIR)/libmlx.a
+CPPFLAGS += -I$(MLX_DIR)
+MLXFLAGS = $(MLX) -framework OpenGL -framework AppKit
 CFLAGS += -Wall -Werror -Wextra
 
 SRC =	mandatory/parse/parsing.c mandatory/parse/check_file.c mandatory/parse/check_map.c mandatory/parse/exit.c mandatory/parse/free.c  mandatory/parse/p_utils.c\
@@ -17,6 +20,11 @@ SRC_BONUS =		bonus/parse_bonus/parsing_bonus.c bonus/parse_bonus/check_file_bonu
 				bonus/raycasting_bonus/render_ray_bonus.c bonus/raycasting_bonus/texture_bonus.c  bonus/raycasting_bonus/render_player_bonus.c bonus/parse_bonus/p_utils_bonus.c\
 
 
+SRC_BONUS += bonus/blockyard/world.c bonus/blockyard/render.c \
+	bonus/blockyard/material.c bonus/blockyard/characters.c \
+	bonus/blockyard/hud.c bonus/blockyard/input.c \
+	bonus/blockyard/build.c bonus/blockyard/adventure_hud.c
+
 LIB=./libft/libft.a
 OBJS = ${SRC:.c=.o}
 
@@ -26,12 +34,15 @@ OBJB = ${SRC_BONUS:.c=.o}
 
 all : ${NAME}
 
-${NAME} : $(LIB) ${OBJS}
-	$(CC) $(CFLAGS) $(MLXFLAGS) $(SRC) -o $(NAME) $(LIB)
+${NAME} : $(LIB) $(MLX) ${OBJS}
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIB) $(MLXFLAGS)
 
 bonus :	${NAME_BONUS}
-${NAME_BONUS} : $(LIB) ${OBJB}
-	$(CC) $(CFLAGS) $(MLXFLAGS) $(SRC_BONUS) -o $(NAME_BONUS) $(LIB)
+${NAME_BONUS} : $(LIB) $(MLX) ${OBJB}
+	$(CC) $(CFLAGS) $(OBJB) -o $(NAME_BONUS) $(LIB) $(MLXFLAGS)
+
+$(MLX):
+	$(MAKE) -C $(MLX_DIR)
 
 $(LIB):
 	cd libft && make
@@ -44,3 +55,16 @@ fclean: clean
 	cd ./libft && make fclean
 
 re: fclean all
+
+.PHONY: all bonus clean fclean re run-blockyard check-blockyard
+
+$(OBJB): bonus/includes/cub3d_bonus.h bonus/includes/blockyard.h
+$(OBJB): CFLAGS += -O2
+
+run-blockyard: bonus
+	./$(NAME_BONUS) maps/island.cub
+
+check-blockyard: $(NAME_BONUS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) tests/blockyard_test.c $(filter-out bonus/parse_bonus/main.o,$(OBJB)) $(LIB) $(MLXFLAGS) -o /tmp/cub3dd-blockyard-test
+	/tmp/cub3dd-blockyard-test
+	python3 tests/blockyard_maps.py
