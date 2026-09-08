@@ -10,15 +10,26 @@ A Minecraft-inspired island adventure built in C on top of a cub3D raycaster.
 
 **C &nbsp; / &nbsp; MiniLibX &nbsp; / &nbsp; macOS &nbsp; / &nbsp; Raycasting**
 
-[Play](#quick-start) · [The adventure](#the-adventure) · [Controls](#controls) · [Under the hood](#under-the-hood) · [Raycasting explained](#how-the-raycaster-works)
+[Watch](#gameplay-video) · [Play](#quick-start) · [The adventure](#the-adventure) · [Controls](#controls) · [Under the hood](#under-the-hood) · [Raycasting explained](#how-the-raycaster-works)
 
 </div>
 
-![Building beside the river at sunset, with a timber bridge, material hotbar, and wandering character](docs/images/blockyard-building.png)
+[![Building a river crossing in Blockyard](docs/images/blockyard-video-preview.png)](docs/media/blockyard-showcase.mp4)
 
 <p align="center"><em>A sunset, an unfinished bridge, and an island waiting to be explored.</em></p>
 
 ---
+
+## Gameplay video
+
+[![Watch the Blockyard gameplay showcase](docs/images/blockyard-video-preview.png)](docs/media/blockyard-showcase.mp4)
+
+**[Watch the 20-second showcase →](docs/media/blockyard-showcase.mp4)**
+
+A silent, scripted tour captured from the actual game renderer: explore the village,
+mine crystal ore, open a door, build a river crossing, and view the island atlas.
+The video includes the updated 64 × 64 procedural materials. Click the preview
+or download the MP4 to watch it.
 
 ## The adventure
 
@@ -39,10 +50,6 @@ An ancient beacon stands silent in the island ruins. Its **six crystal shards** 
 5. **Restore.** Mine all six cyan crystal blocks, then face the beacon in the southeastern ruins and press **E**.
 
 You start with **8 stone · 8 grass · 16 timber**. After restoring the beacon, you can keep exploring and building.
-
-![Exploring the block village with the miner pickaxe equipped, beneath a peach-and-lavender sky](docs/images/blockyard-exploration.png)
-
-<p align="center"><em>The miner pickaxe: your first tool for changing the world.</em></p>
 
 ## Quick start
 
@@ -244,7 +251,7 @@ For each pixel in the projected wall strip:
 v = (pixel_y - wall_top) / wall_height
 ```
 
-[`vx_material()`](bonus/blockyard/material.c) converts `(u, v)` into a procedural color, generally using a **32 × 32** pattern. It draws mortar, timber grain, grass edges, crystal flecks, and door details. Wall coordinates seed the variation between blocks.
+[`vx_material()`](bonus/blockyard/material.c) converts `(u, v)` into a procedural color, generally using a **64 × 64** pattern. It draws mortar, timber grain, grass edges, crystal flecks, and door details. Wall coordinates seed the variation between blocks.
 
 [`vx_render()`](bonus/blockyard/render.c) applies mining cracks, darkens one wall orientation, and reduces brightness with distance. This is inexpensive directional and distance shading; there are no dynamic light sources or cast shadows.
 
