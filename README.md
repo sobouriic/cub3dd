@@ -375,6 +375,11 @@ make fclean    # Also remove game executables and libft archive
 
 </details>
 
+## License
+
+Project code is licensed under the [MIT License](LICENSE).
+Vendored MiniLibX retains its separate [license and copyright notice](mlx/LICENSE).
+
 ---
 
 <p align="center">
